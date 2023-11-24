@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import WithSubnavigation from '../components/Navigation'
 import httpClient from '../utils/httpClient'
+import { useNavigate } from 'react-router-dom'
 
 export default function HomePage() {
   const [travels, setTravels] = useState([])
   const [weather, setWeather] = useState([])
   const [user, setUser] = useState(null)
+
+  const navigation = useNavigate()
 
   useEffect(()=>{
     getData()
@@ -16,10 +19,17 @@ export default function HomePage() {
     console.log(data)
   }
 
+  const handleLogout = async () => {
+    const {data} = await httpClient.post("/logout")
+    navigation("/login")
+  }
+
   return (
     <div>
         <WithSubnavigation/>
         <h1>Strona główna</h1>
+
+        <button onClick={()=>handleLogout()}>Wyloguj</button>
     </div>
   )
 }
